@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Lane Tech QuickStart</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        :root {
+            --mdc-theme-primary: blue;
+        }
+
+        .mdc-top-app-bar {
+            background-color: var(--mdc-theme-primary);
+        }
+
+        iframe {
+            width: 95%;
+            min-height: 400px;
+            height: 75%;
+            overflow: auto;
+        }
+
+        header {
+            top: 0px;
+        }
+
+        main {
+            margin-left: 24px;
+        }
+
+        .mdc-list-item__graphic {
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+
+
+</head>
+
+<body class="mdc-typography">
+    <header class="mdc-top-app-bar mdc-top-app-bar--fixed">
+        <div class="mdc-top-app-bar__row">
+            <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+                <a href="#" class="material-icons mdc-top-app-bar__navigation-icon">menu</a>
+                <span class="mdc-top-app-bar__title">Lane Tech QuickStart</span>
+            </section>
+        </div>
+    </header>
+
+    <aside class="mdc-drawer mdc-drawer--temporary mdc-typography" data-mdc-auto-init="MDCTemporaryDrawer">
+        <nav class="mdc-drawer__drawer">
+
+            <header class="mdc-drawer__header">
+                <div class="mdc-drawer__header-content">
+                    Header content goes here
+                </div>
+            </header>
+
+            <nav id="icon-with-text-demo" class="mdc-drawer__content mdc-list">
+                <a class="mdc-list-item mdc-list-item--activated" href="#">
+                    <span class="drawer-list-item-text">Home</span><i class="material-icons mdc-list-item__graphic" aria-hidden="true">done</i>
+                 </a>
+                <a class="mdc-list-item" href="#">
+                <i class="material-icons mdc-list-item__graphic" aria-hidden="true">star</i>Star
+              </a>
+            </nav>
+        </nav>
+    </aside>
+
+    <main class="mdc-toolbar-fixed-adjust">
+        <div>Use the scroll bar on the right side to read through the document.</div>
+
+        <iframe src="https://docs.google.com/document/d/e/2PACX-1vRTdMePgesGstF2p4YCL8Q6wtcFtNMrKKBa-UM5KRJmSfriOmJjcholcpf5NZpmLGI2DXWaJftcgSoA/pub?embedded=true"></iframe>
+
+        <div>
+            <div class="mdc-switch">
+                <input data-item="promotion-policy" type="checkbox" id="basic-switch" class="mdc-switch__native-control oneway" role="switch">
+                <div class="mdc-switch__background">
+                    <div class="mdc-switch__knob"></div>
+                </div>
+            </div>
+            <label for="basic-switch">I have read and understood the promotion policy information.</label>
+        </div>
+
+    </main>
+
+    <form id="upload">
+    <input id="imageUpload" name="imageUpload" type="file" accept="image/*">
+    </form>
+    
+    <div id="test"></div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+
+    <script type="text/javascript">
+        window.mdc.autoInit();
+
+        const drawer = $(".mdc-drawer--temporary")[0].MDCTemporaryDrawer;
+
+        const pages = [
+            { "name": "Home" },
+            { "name": "Student Profile" },
+            { "name": "Contacts" },
+            { "name": "Documents" },
+            { "name": "Directory Opt-In/Out" },
+            { "name": "Recruiter Opt-In/Out" }
+        ];
+
+        const imageUploadMaxFileSize = 1000 * 1000 * 3; // 3 MB
+    </script>
+
+    <script>
+        var uploadUrl = 'https://script.google.com/macros/s/AKfycbwnrG9nKxTj0ZlI015Nl7kk11DlFwTH_InRqjF0iSnzKrMLzAE/exec';
+        var params = {
+            filename: 'samplefile',
+            imageformat: 'PNG'
+        };
+    
+        $(document).ready(function() {
+
+            loadDrawerLinks(pages);
+
+
+
+            // show drawer when menu icon clicked
+            $(".mdc-top-app-bar__navigation-icon").on("click", function(e) {
+                drawer.open = true;
+            });
+
+            $("body").on("click", ".mdc-list-item", function(e) {
+                $(".mdc-list-item").removeClass("mdc-list-item--activated");
+                $(this).addClass("mdc-list-item--activated");
+                drawer.open = false;
+            });
+
+
+            $('#imageUpload').on("change", function(e) {
+                var file = this.files[0];
+                var fr = new FileReader();
+                fr.onload = function(e) {
+                    params.file = e.target.result.replace(/^.*,/, '');
+                    params.id = "44121111";
+                    params.docType = "proof of residence";
+                    params.filename = params.id + "-" + params.docType;
+                    params.callback = "handleDocId";
+                    //console.log(params.file);
+                    
+                    doImagePost(params);
+                    //postJump();
+                }
+                fr.readAsDataURL(file);
+            });
+
+            
+            function doImagePost(params) {
+                    //console.log(JSON.stringify(params));
+                    $.ajax({
+                        url: uploadUrl,
+                        type: 'post',
+                        data: params,
+                        jsonp: false, 
+                        jsonpCallback: "handleDocId",
+                        success: function(response) {
+                            eval(response);
+                        } 
+                    });                
+            }
+            
+            
+            
+            
+            
+            function postJump(){
+                var html = '<form method="post" onSubmit="return false;" action="'+uploadUrl+'" id="postjump" style="display: none;">';
+                Object.keys(params).forEach(function (key) {
+                    html += '<input type="hidden" name="'+key+'" value="'+params[key]+'" >';
+                });
+                html += '</form>';
+                $("body").append(html);
+                $('#postjump').submit();
+                $('#postjump').remove();
+            }
+
+
+
+            $("#zimageUpload").on("change", function(e) {
+                var file = e.target.files[0];
+                
+                if (file.size > imageUploadMaxFileSize) {
+                    return alert("Image file size exceeds the maximum size of " +
+                        (imageUploadMaxFileSize / (1000 * 1000)) + " MB; " +
+                        " Please save your image at a lower resolution.");
+                }
+                else {
+                    console.log(file);
+                    fd = new FormData();
+                    fd.append('file', file);
+                    fd.append('callback', 'handleDocId');
+                    console.log(fd);
+                    $.ajax({
+                        url: "",
+                        type: 'post',
+                        data: fd,
+                        contentType: false,
+                        processData: false,
+                        success: function(response) {
+                            if (response != 0) {
+                                $("#img").attr("src", response);
+                            }
+                            else {
+                                alert('file not uploaded');
+                            }
+                        },
+                    });
+                }
+            });
+
+
+
+            // one-way switches;  disable when changed to true
+            $(".oneway").on("change", function(e) {
+                if ($(this).prop("checked")) {
+                    $(this).prop("disabled", true);
+
+                    // TODO:  save data
+
+                }
+            });
+
+
+             $("#test").load("./_pageX.html")  ; 
+
+
+
+
+
+        });
+    </script>
+
+
+    <script>
+        // functions
+
+        function loadDrawerLinks(pages) {
+            var clone;
+            var parent = $(".mdc-drawer__content.mdc-list");
+
+            // load page links in drawer
+            $.each(pages, function(i, v) {
+                // clone first item and update content
+                clone = $(".mdc-list-item").eq(0).clone();
+                // update the text node
+                clone.find(".drawer-list-item-text").text(v.name);
+                parent.append(clone);
+
+            });
+        }
+        
+        
+        
+        function handleDocId (data) {
+            console.log("handleDocId", data);
+            
+        }
+    </script>
+
+</body>
+
+</html>
