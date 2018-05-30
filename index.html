@@ -97,24 +97,42 @@
     </form>
     
     <div id="test"></div>
+    
+    
+<aside id="qs-dialog"
+  class="mdc-dialog"
+  role="alertdialog"
+  aria-labelledby="my-mdc-dialog-label"
+  aria-describedby="my-mdc-dialog-description"
+  data-mdc-auto-init="MDCDialog">
+  <div class="mdc-dialog__surface">
+    <header class="mdc-dialog__header">
+      <h2 id="my-mdc-dialog-label" class="mdc-dialog__header__title">
+        Title
+      </h2>
+    </header>
+    <section id="my-mdc-dialog-description" class="mdc-dialog__body">
+      Body
+    </section>
+    <footer class="mdc-dialog__footer">
+      <button type="button" class="mdc-button mdc-dialog__footer__button mdc-dialog__footer__button--cancel">Decline</button>
+      <button type="button" class="mdc-button mdc-dialog__footer__button mdc-dialog__footer__button--accept">Accept</button>
+    </footer>
+  </div>
+  <div class="mdc-dialog__backdrop"></div>
+</aside>    
+    
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 
     <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+    
+    <script src="./pages.js"></script>
 
     <script type="text/javascript">
         window.mdc.autoInit();
 
         const drawer = $(".mdc-drawer--temporary")[0].MDCTemporaryDrawer;
-
-        const pages = [
-            { "name": "Home" },
-            { "name": "Student Profile" },
-            { "name": "Contacts" },
-            { "name": "Documents" },
-            { "name": "Directory Opt-In/Out" },
-            { "name": "Recruiter Opt-In/Out" }
-        ];
 
         const imageUploadMaxFileSize = 1000 * 1000 * 3; // 3 MB
     </script>
@@ -272,6 +290,54 @@
             console.log("handleDocId", data);
             
         }
+        
+        
+        
+        function saveQuickstartItem (data) {
+
+            $.post(
+                    'https://lanetech.org/api/processes/processes.php/saveQuickstartData/', 
+                    { 
+                        idtoken: id_token,
+                        columns: data
+                    },
+                    function(response) {
+                        console.log(response);
+                        showDialog(response.result, response.message);
+                    });       
+
+        } 
+        
+        
+        function showDialog(title, body) {
+            console.log("in showDialog");
+            $("#qs-dialog").find(".mdc-dialog__header__title").text(title);
+            $("#qs-dialog").find(".mdc-dialog__body").text(body);
+            $("#qs-dialog")[0].MDCDialog.show();
+        }
+        
+            
+        function doLogin(data) {
+            $.post(
+                    'https://lanetech.org/api/processes/processes.php/QuickstartLogin/', 
+                    
+                    { 
+                        idtoken: 0,
+                        columns: {
+                            student_id: data.student_id,
+                            lastName: data.lastName,
+                            schoolYear:  data.schoolYear    
+						}
+
+                    },
+                    function(response) {
+                        showModal(response.result, response.message);
+                    });             
+            
+            
+        }            
+            
+
     </script>
 
 </body>
