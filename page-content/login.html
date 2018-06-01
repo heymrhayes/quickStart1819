@@ -1,0 +1,33 @@
+
+    
+        <h2 class="mdc-typography--headline2">Welcome to QuickStart!</h2>
+        <p class="mdc-typography--body1">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam pharetra feugiat scelerisque. Nulla vitae sagittis metus, nec tristique odio. Nulla vulputate venenatis sem, in fermentum elit blandit at. Suspendisse libero nisi, fringilla sit amet posuere vitae, mollis eu ante. Nam hendrerit nisi magna, efficitur aliquam sem maximus a. Pellentesque nisi mi, imperdiet vitae rhoncus vitae, pulvinar et felis. Nullam in erat eu arcu viverra dignissim quis in libero. In suscipit rhoncus libero. Suspendisse tincidunt mattis auctor. Aenean dolor libero, eleifend a venenatis non, accumsan non tortor.</p>
+        
+        <p class="mdc-typography--body1">Suspendisse ac porttitor lectus. Quisque vestibulum libero et nibh elementum bibendum. Pellentesque velit tellus, euismod porttitor egestas et, vestibulum at neque. Nunc vitae facilisis ipsum. Quisque imperdiet ex imperdiet, ullamcorper metus pellentesque, scelerisque odio. Suspendisse non lacinia ex. Proin elementum at ex non laoreet. In lobortis ac dui id vestibulum. In quis ultricies lorem. Proin vitae tincidunt metus, in faucibus ex. Quisque ut augue sed odio congue fermentum. Sed eu nunc vel nunc ornare mollis. Cras et neque ut libero elementum ultricies.</p>
+        
+        
+    <div class="mdc-text-field" data-mdc-auto-init="MDCTextField">
+      <input type="text" id="qsusername" class="mdc-text-field__input">
+      <label class="mdc-floating-label" for="qsusername">Username</label>
+      <div class="mdc-line-ripple"></div>
+    </div>
+
+    <div class="mdc-text-field" data-mdc-auto-init="MDCTextField">
+      <input type="text" id="qspassword" class="mdc-text-field__input">
+      <label class="mdc-floating-label" for="qspassword">Password</label>
+      <div class="mdc-line-ripple"></div>
+    </div>
+
+    <button id="doQsLogin" class="mdc-button mdc-button--raised">
+      Button
+    </button>
+    
+
+<script>
+    $("#doQsLogin").on("click", function() {
+        var home_data = {};
+        home_data.student_id = $("#qsusername").val();
+        home_data.lastName = $("#qspassword").val();
+        doLogin(home_data);
+    });
+</script>

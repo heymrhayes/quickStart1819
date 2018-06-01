@@ -1,0 +1,52 @@
+
+
+        <h2 class="mdc-typography--headline2">Quickstart Status for <span id="studentName"></span></h2>
+
+        <p class="mdc-typography--body1">This page shows the completion status for each section of the QuickStart process; click to navigate to any section.</p>
+        
+        <ul id="qsPageStatusList" class="mdc-list demo-list">
+            <li class="template mdc-list-item mdc-ripple-upgraded">
+                <span class="mdc-list-item__text">First-line text
+                    <span class="mdc-list-item__secondary-text">
+                    Second-line text
+                    </span>
+                </span>
+            
+            <span class="mdc-list-item__meta" aria-hidden="true">status<i class="qspage-status-indicator material-icons">
+                check_circle
+                </i></span>
+
+        </ul>
+        
+        <p class="mdc-typography--body1">Suspendisse ac porttitor lectus. Quisque vestibulum libero et nibh elementum bibendum. Pellentesque velit tellus, euismod porttitor egestas et, vestibulum at neque. Nunc vitae facilisis ipsum. Quisque imperdiet ex imperdiet, ullamcorper metus pellentesque, scelerisque odio. Suspendisse non lacinia ex. Proin elementum at ex non laoreet. In lobortis ac dui id vestibulum. In quis ultricies lorem. Proin vitae tincidunt metus, in faucibus ex. Quisque ut augue sed odio congue fermentum. Sed eu nunc vel nunc ornare mollis. Cras et neque ut libero elementum ultricies.</p>
+        
+    <script>
+        getData('QuickstartStudentPage',11111111, handleQSPageData);
+        
+        function handleQSPageData (response) {
+            console.log(response);
+            var clone, pageDetails;
+            if (response.result.toLowerCase() == "success") {
+                $.each(response.data, function(i,v) {
+                    pageDetails = getPageDetails(v.page);
+                    console.log(pageDetails);
+                    clone = $("#qsPageStatusList li").eq(0).clone();
+                    //clone.find(".mdc-list-item__text").contents().eq(0).text(v.page + ' ' + v.status);
+                    
+                    clone.find(".mdc-list-item__text").contents().filter(function(){ return this.nodeType == 3; }).first().replaceWith(pageDetails.displayName);
+                    clone.find(".mdc-list-item__secondary-text").text(pageDetails.desc);
+                    clone.find(".mdc-list-item__meta").contents().filter(function(){ return this.nodeType == 3; }).first().replaceWith(v.status + ' ');
+                    clone.find(".mdc-list-item__meta i").text('check_circle');
+                    clone.removeClass("template");
+                    $("#qsPageStatusList").append(clone);
+                });
+            } else {
+                
+            }
+        }
+        
+        if (!userQsData.hasOwnProperty("status")) {
+            // get user page data
+        }
+        
+    </script>

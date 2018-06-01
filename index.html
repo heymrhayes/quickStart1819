@@ -40,6 +40,12 @@
             color: green;
             font-weight: bold;
         }
+        
+        .qspage-status-indicator {
+            vertical-align: text-bottom;
+        }
+        
+        .template {display:none;}
     </style>
 
 
@@ -96,7 +102,7 @@
     <input id="imageUpload" name="imageUpload" type="file" accept="image/*">
     </form>
     
-    <div id="test"></div>
+    <div id="main-content"></div>
     
     
 <aside id="qs-dialog"
@@ -131,6 +137,14 @@
 
     <script type="text/javascript">
         window.mdc.autoInit();
+
+        const currentQsSchoolYear = 1819;
+        
+        var id_token = "";
+        
+        var isLoggedIn = false;
+        
+        var userQsData = {};
 
         const drawer = $(".mdc-drawer--temporary")[0].MDCTemporaryDrawer;
 
@@ -254,13 +268,9 @@
 
                 }
             });
-
-
-             $("#test").load("./_pageX.html")  ; 
-
-
-
-
+            
+            
+            showPage("login");
 
         });
     </script>
@@ -318,6 +328,7 @@
         
             
         function doLogin(data) {
+            console.log(data);
             $.post(
                     'https://lanetech.org/api/processes/processes.php/QuickstartLogin/', 
                     
@@ -326,17 +337,96 @@
                         columns: {
                             student_id: data.student_id,
                             lastName: data.lastName,
-                            schoolYear:  data.schoolYear    
+                            schoolYear:  currentQsSchoolYear    
 						}
 
                     },
                     function(response) {
-                        showModal(response.result, response.message);
+
+                        if (response.data != null && response.data.length == 32) {
+                            id_token = response.data;
+                            isLoggedIn = true;
+                            showPage("home");
+                        }
                     });             
             
             
         }            
             
+
+        function showPage(pageName) {
+            if (!isLoggedIn) {
+                pageName = "login";
+            }
+            $("main").load("./page-content/loading.html", function() {
+              var url = "./page-content/" + pageName + ".html";
+                $("main").load(url, function() {
+                     window.mdc.autoInit($("main")[0]);
+                })  ;   
+            });
+            
+            
+           
+        }
+
+
+        // function getStudentIdFromObj (obj) {
+        //     var id;
+            
+        //     switch (typeof obj) {
+        //         case "string":
+        //             id = parseInt(obj);
+        //         case "number":
+        //             id = obj;
+        //             break;
+        //         case "object":
+        //             if (obj.hasOwnProperty("student_id")) {
+        //                 id = obj["student_id"];
+        //             } else {
+        //                 id = 0
+        //             };
+        //             break
+    
+        //     }
+            
+        //     return id;
+        // }
+
+
+        // function getStudentQSPageData (obj) {
+        //     var id = getStudentIdFromObj (obj);
+            
+            
+            
+        // }
+
+
+
+        function getData(strResource, strKey, callback) {
+            $.post(
+                    'https://lanetech.org/api/v2/api.php/' + strResource + '/' + (strKey != 0 ? strKey : ''), 
+                    
+                    { 
+                        idtoken: id_token,
+                        method: "GET"
+                    
+                    },
+                    function(response) {
+                        // no error handling here;  the callback function will handle
+                        
+                        console.log(response);
+                        
+                        callback(response);
+
+                        
+                    });
+            }   
+            
+            function getPageDetails (strPage) {
+                return pageDetails[strPage];
+            }
+
+
 
     </script>
 
