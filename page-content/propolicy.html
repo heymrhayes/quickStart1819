@@ -1,0 +1,44 @@
+
+
+        <h5 class="mdc-typography--headline5">Promotion Policy</h5>
+
+        <div>Use the scroll bar on the right side to read through the document.</div>
+
+        <iframe src="https://docs.google.com/document/d/e/2PACX-1vRTdMePgesGstF2p4YCL8Q6wtcFtNMrKKBa-UM5KRJmSfriOmJjcholcpf5NZpmLGI2DXWaJftcgSoA/pub?embedded=true"></iframe>
+
+        <div>
+            <div class="mdc-switch">
+                <input data-item="promotion-policy" type="checkbox" id="basic-switch" class="mdc-switch__native-control oneway" role="switch">
+                <div class="mdc-switch__background">
+                    <div class="mdc-switch__knob"></div>
+                </div>
+            </div>
+            <label for="basic-switch">I have read and understood the promotion policy information.</label>
+        </div>
+        
+    <script>
+
+        function handlePropolicyData (response) {
+            console.log("handlePropolicyData");
+            if (response.data.length === 1) {
+                if (response.data[0].value === "1") {
+                    $("input[data-item='promotion-policy']").prop("checked","true");
+                    $("input[data-item='promotion-policy']").prop("disabled","true");
+                }
+            }
+        };
+
+
+
+        
+        getData('QuickstartStudentItem', 0, function(response) {
+            console.log(response);
+            handlePropolicyData(response);
+        },
+        {student_id: 11111111, itemCode: "propolicyagreement"});
+        
+        
+        
+       
+        
+    </script>

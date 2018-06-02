@@ -20,6 +20,8 @@
         .mdc-top-app-bar {
             background-color: var(--mdc-theme-primary);
         }
+        
+        /*.mdc-typography--headline5, .mdc-typography--body1 {padding: 0 16px 0 16px;}*/
 
         iframe {
             width: 95%;
@@ -82,19 +84,7 @@
     </aside>
 
     <main class="mdc-toolbar-fixed-adjust">
-        <div>Use the scroll bar on the right side to read through the document.</div>
 
-        <iframe src="https://docs.google.com/document/d/e/2PACX-1vRTdMePgesGstF2p4YCL8Q6wtcFtNMrKKBa-UM5KRJmSfriOmJjcholcpf5NZpmLGI2DXWaJftcgSoA/pub?embedded=true"></iframe>
-
-        <div>
-            <div class="mdc-switch">
-                <input data-item="promotion-policy" type="checkbox" id="basic-switch" class="mdc-switch__native-control oneway" role="switch">
-                <div class="mdc-switch__background">
-                    <div class="mdc-switch__knob"></div>
-                </div>
-            </div>
-            <label for="basic-switch">I have read and understood the promotion policy information.</label>
-        </div>
 
     </main>
 
@@ -105,7 +95,7 @@
     <div id="main-content"></div>
     
     
-<aside id="qs-dialog"
+    <aside id="qs-dialog"
   class="mdc-dialog"
   role="alertdialog"
   aria-labelledby="my-mdc-dialog-label"
@@ -402,9 +392,15 @@
 
 
 
-        function getData(strResource, strKey, callback) {
+        function getData(strResource, strKey, callback, filters) {
+            var paramString = "";
+            
+            if (typeof filters == "object") {
+                paramString += "?" + $.param(filters);
+            }
+            
             $.post(
-                    'https://lanetech.org/api/v2/api.php/' + strResource + '/' + (strKey != 0 ? strKey : ''), 
+                    'https://lanetech.org/api/v2/api.php/' + strResource +  (strKey != 0 ? '/' + strKey : '') + paramString, 
                     
                     { 
                         idtoken: id_token,
